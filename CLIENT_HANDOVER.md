@@ -1,0 +1,21 @@
+# Client Handover Checklist
+
+- [ ] Clinic name, slogan, description, story
+- [ ] Doctor name, qualification, specialization, bio
+- [ ] Phone + WhatsApp number
+- [ ] Email
+- [ ] Address
+- [ ] Opening hours
+- [ ] Google Maps link
+- [ ] Doctor photo
+- [ ] Clinic photos (hero, about, gallery — reception/treatment room/waiting area/equipment/exterior)
+- [ ] Services actually offered (edit the list)
+- [ ] Genuine, permissioned testimonials (or leave empty — section hides itself)
+- [ ] Social links
+- [ ] `demoMode` set to `false`
+- [ ] Domain / `websiteUrl` updated (config.js, canonical + og:url in index.html, sitemap.xml, robots.txt)
+- [ ] SEO title + description updated in index.html
+- [ ] Mobile testing (menu, sticky Call/WhatsApp/Book bar, gallery filters, FAQ, form)
+- [ ] Desktop testing
+- [ ] Call, WhatsApp, Maps buttons all verified with the real numbers/link
+- [ ] No "Details to be added", "XXXX" or bracketed placeholder text visible anywhere

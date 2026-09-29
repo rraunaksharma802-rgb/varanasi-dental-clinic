@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://example.com/sitemap.xml
+Sitemap: https://rraunaksharma802-rgb.github.io/varanasi-dental-clinic/sitemap.xml
