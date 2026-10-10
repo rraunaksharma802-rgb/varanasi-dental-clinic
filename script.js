@@ -2,8 +2,8 @@
   "use strict";
   const $ = (s, el = document) => el.querySelector(s);
   const $$ = (s, el = document) => [...el.querySelectorAll(s)];
-  const C = (typeof SITE_CONFIG !== "undefined") ? SITE_CONFIG : null;
-  if (!C) { console.error("SITE_CONFIG missing — load config.js before script.js"); return; }
+  const C = (typeof CLINIC_CONFIG !== "undefined") ? CLINIC_CONFIG : null;
+  if (!C) { console.error("CLINIC_CONFIG missing — load config.js before script.js"); return; }
   const DEMO = !!C.demoMode;
 
   const esc = (t) => String(t).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
@@ -18,7 +18,6 @@
     const t = $("#toast"); t.textContent = msg; t.classList.add("on");
     clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("on"), 3200);
   };
-  const demoNote = (el, text) => el.addEventListener("click", (e) => { e.preventDefault(); toast(text); });
 
   /* ---------- icons ---------- */
   const P = {
@@ -45,19 +44,45 @@
   $$("[data-icon]").forEach((el) => (el.innerHTML = icon(el.dataset.icon)));
 
   function fillVisual(el, src, alt, label, ico) {
-    const placeholder = () => { el.classList.add("is-placeholder"); el.innerHTML = `<div class="ph">${icon(ico, "icon icon-lg")}<b>${esc(label)}</b></div>`; };
+    const placeholder = () => { el.classList.add("is-placeholder"); el.innerHTML = `<div class="ph">${icon(ico, "icon icon-lg")}</div>`; };
     if (!src) return placeholder();
-    const img = new Image(); img.alt = alt; img.loading = "lazy"; img.decoding = "async";
+    const img = new Image(); img.alt = alt; img.decoding = "async";
+    // NOTE: loading="lazy" is intentionally not set here — this Image is created
+    // off-DOM to pre-check the path, and a detached lazy image never fires
+    // load/error at all, which left broken paths showing a permanently blank box.
     img.onerror = placeholder;
-    img.onload = () => { el.classList.remove("is-placeholder"); el.innerHTML = ""; el.appendChild(img); };
+    img.onload = () => { el.classList.remove("is-placeholder"); el.innerHTML = ""; img.loading = "lazy"; el.appendChild(img); };
     img.src = src;
   }
 
   /* ---------- brand / meta ---------- */
   document.title = `${C.clinicName} — General & Cosmetic Dentistry in ${C.city}`;
   if (ok(C.websiteUrl)) { const c = $('link[rel="canonical"]'); if (c) c.href = C.websiteUrl; const o = $('meta[property="og:url"]'); if (o) o.content = C.websiteUrl; }
-  $("#logo-icon").innerHTML = icon("tooth");
-  $$(".logo-mark").forEach((el) => { if (!el.innerHTML) el.innerHTML = icon("tooth"); });
+  // Keep meta description / Open Graph / Twitter text in sync with CLINIC_CONFIG,
+  // so re-branding this template for a new clinic only ever requires editing config.js.
+  const pageTitle = document.title;
+  const pageDesc = ok(C.clinicDescription) ? C.clinicDescription : `Dental care in ${C.city} — ${C.clinicName}.`;
+  const setMeta = (sel, attr, val) => { const el = $(sel); if (el) el.setAttribute(attr, val); };
+  setMeta('meta[name="description"]', "content", pageDesc);
+  setMeta('meta[property="og:site_name"]', "content", C.clinicName);
+  setMeta('meta[property="og:title"]', "content", pageTitle);
+  setMeta('meta[property="og:description"]', "content", pageDesc);
+  if (ok(C.images.hero)) {
+    const abs = /^https?:\/\//.test(C.images.hero) ? C.images.hero : (ok(C.websiteUrl) ? C.websiteUrl.replace(/\/$/, "") + "/" + C.images.hero.replace(/^\//, "") : C.images.hero);
+    setMeta('meta[property="og:title"]', "content", pageTitle); // no-op safeguard if tag missing above
+    if (!$('meta[property="og:image"]')) { const m = document.createElement("meta"); m.setAttribute("property", "og:image"); document.head.appendChild(m); }
+    setMeta('meta[property="og:image"]', "content", abs);
+    setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
+    if (!$('meta[name="twitter:image"]')) { const m = document.createElement("meta"); m.setAttribute("name", "twitter:image"); document.head.appendChild(m); }
+    setMeta('meta[name="twitter:image"]', "content", abs);
+  }
+  if (ok(C.images.logo)) {
+    const li = new Image(); li.alt = C.clinicName; li.onerror = () => { $$(".logo-mark").forEach((el) => (el.innerHTML = icon("tooth"))); };
+    li.onload = () => { $$(".logo-mark").forEach((el) => { el.innerHTML = ""; el.appendChild(li.cloneNode()); }); };
+    li.src = C.images.logo;
+  } else {
+    $$(".logo-mark").forEach((el) => (el.innerHTML = icon("tooth")));
+  }
   $("#brand-name").textContent = C.clinicName.split(" ")[0] || C.clinicName;
   $("#brand-city").textContent = C.clinicTagline;
   $("#hero-slogan").textContent = C.clinicSlogan;
@@ -65,10 +90,10 @@
   $("#banner-icon").innerHTML = icon("tooth");
 
   /* ---------- CTAs ---------- */
-  $$("[data-call]").forEach((a) => { if (phoneOk) a.href = tel(); else if (DEMO) { a.href = "#contact"; demoNote(a, "Phone number will be added here"); } else a.hidden = true; });
+  $$("[data-call]").forEach((a) => { if (phoneOk) a.href = tel(); else a.hidden = true; });
   $$("[data-wa]").forEach((a) => {
     const msg = C.messages[a.dataset.wa] || C.messages.general;
-    if (waOk) a.href = wa(msg); else if (DEMO) { a.href = "#contact"; a.removeAttribute("target"); demoNote(a, "WhatsApp number will be added here"); } else a.hidden = true;
+    if (waOk) a.href = wa(msg); else a.hidden = true;
   });
   if (!$$(".sticky-cta a").filter((a) => !a.hidden).length) $(".sticky-cta").hidden = true;
 
@@ -77,7 +102,7 @@
 
   /* ---------- visuals ---------- */
   fillVisual($("#hero-visual"), C.images.hero, "Patient at the dental clinic", "Clinic Photo", "tooth");
-  fillVisual($("#about-visual"), C.images.about, "Inside the clinic", "Clinic Interior", "image");
+  fillVisual($("#about-visual"), C.images.clinic, "Inside the clinic", "Clinic Interior", "image");
   fillVisual($("#doctor-visual"), C.images.doctor, `Portrait of ${C.doctorName || "the dentist"}`, "Doctor Photo", "user");
 
   /* ---------- about ---------- */
@@ -106,7 +131,7 @@
   $("#process-list").innerHTML = C.process.map((p) => `<li><span class="p-circle">${icon(p.icon)}</span><span class="num">${p.step}</span><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p></li>`).join("");
 
   /* ---------- gallery + filters ---------- */
-  const gal = C.gallery.filter((g) => g.src || DEMO);
+  const gal = C.gallery; // every item shows either a real photo or a neutral placeholder tile
   if (!gal.length) { $("#gallery").hidden = true; $("#nav-gallery").hidden = true; }
   else {
     const cats = ["All", ...new Set(gal.map((g) => g.category).filter(Boolean))];
@@ -115,7 +140,7 @@
       const items = gal.filter((g) => cat === "All" || g.category === cat);
       $("#gallery-grid").innerHTML = items.map((_, i) => `<figure class="gal-item" id="gal-${i}"></figure>`).join("");
       items.forEach((g, i) => {
-        const el = $(`#gal-${i}`); fillVisual(el, g.src, g.label, g.label, "image");
+        const el = $(`#gal-${i}`); fillVisual(el, g.src, `${g.label} at ${C.clinicName}`, g.label, "image");
         if (g.src) { const cap = document.createElement("figcaption"); cap.textContent = g.label; el.appendChild(cap); }
       });
     };
@@ -144,17 +169,24 @@
   }));
 
   /* ---------- contact ---------- */
-  const tba = '<em class="tba-text">Details to be added</em>';
   const rows = [];
-  if (hasAddr) rows.push(["pin", "Address", esc(`${C.address.line1}, ${C.address.line2}`)]); else if (DEMO) rows.push(["pin", "Address", tba]);
-  if (phoneOk) rows.push(["phone", "Phone", `<a href="${tel()}">${esc(C.clinicPhoneDisplay || C.clinicPhone)}</a>`]); else if (DEMO) rows.push(["phone", "Phone", tba]);
-  if (waOk) rows.push(["chat", "WhatsApp", `<a href="${wa(C.messages.general)}" target="_blank" rel="noopener">${esc(C.clinicPhoneDisplay || C.whatsappNumber)}</a>`]); else if (DEMO) rows.push(["chat", "WhatsApp", tba]);
+  if (hasAddr) rows.push(["pin", "Address", esc(`${C.address.line1}, ${C.address.line2}`)]);
+  if (phoneOk) rows.push(["phone", "Phone", `<a href="${tel()}">${esc(C.clinicPhoneDisplay || C.clinicPhone)}</a>`]);
+  if (waOk) rows.push(["chat", "WhatsApp", `<a href="${wa(C.messages.general)}" target="_blank" rel="noopener">${esc(C.clinicPhoneDisplay || C.whatsappNumber)}</a>`]);
   const hrs = (C.openingHours || []).filter((h) => ok(h.time)).map((h) => `${esc(h.days)}: ${esc(h.time)}`);
-  if (hrs.length) rows.push(["clock", "Opening Hours", hrs.join("<br>")]); else if (DEMO) rows.push(["clock", "Opening Hours", tba]);
-  if (ok(C.email)) rows.push(["mail", "Email", `<a href="mailto:${esc(C.email)}">${esc(C.email)}</a>`]); else if (DEMO) rows.push(["mail", "Email", tba]);
+  if (hrs.length) rows.push(["clock", "Opening Hours", hrs.join("<br>")]);
+  if (ok(C.email)) rows.push(["mail", "Email", `<a href="mailto:${esc(C.email)}">${esc(C.email)}</a>`]);
   $("#info-list").innerHTML = rows.map(([i, l, v]) => `<li><span class="icon-slot">${icon(i)}</span><span><b>${l}</b><span>${v}</span></span></li>`).join("");
-  if (mapsOk) $("#map-embed").innerHTML = `<iframe src="${C.googleMapsUrl}" style="border:0;width:100%;height:100%" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Clinic location map"></iframe>`;
-  else $("#map-embed").innerHTML = `<div class="ph">${icon("pin", "icon icon-lg")}<b>Google Maps</b><small>${DEMO ? "Add the clinic's Maps link in config.js" : "Location to be added"}</small></div>`;
+  if (!rows.length) $("#info-list").hidden = true;
+  if (mapsOk) { $("#map-embed").innerHTML = `<iframe src="${C.googleMapsUrl}" style="border:0;width:100%;height:100%" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Clinic location map"></iframe>`; }
+  else { $("#map-embed").hidden = true; }
+  if (!rows.length && !mapsOk) {
+    $("#contact").hidden = true;
+    $("#nav-contact").hidden = true;
+    $("#footer-nav-contact").hidden = true;
+  } else if (!mapsOk) {
+    $(".contact-grid").classList.add("single");
+  }
 
   /* ---------- footer ---------- */
   $("#f-brand").textContent = C.clinicName;
@@ -162,12 +194,13 @@
   $("#f-services").innerHTML = C.services.slice(0, 6).map((s) => `<a href="#services">${esc(s.name)}</a>`).join("");
   const soc = [["Facebook", C.facebookUrl], ["Instagram", C.instagramUrl], ["Twitter", C.twitterUrl]].filter(([, u]) => /^https?:\/\//.test(u || ""));
   const socHtml = soc.map(([n, u]) => `<a href="${esc(u)}" target="_blank" rel="noopener">${n}</a>`).join("");
-  $("#f-social").innerHTML = socHtml; $("#f-social2").innerHTML = socHtml || (DEMO ? "<span>Add social links in config.js</span>" : "");
+  $("#f-social").innerHTML = socHtml; $("#f-social2").innerHTML = socHtml;
+  if (!socHtml) { $("#f-social").hidden = true; $("#f-social2").parentElement.hidden = true; }
   $("#f-copy").textContent = `\u00A9 ${new Date().getFullYear()} ${C.clinicName}. All rights reserved.`;
 
   /* ---------- mobile menu ---------- */
   const menuBtn = $("#menuBtn"), nav = $("#nav");
-  const setMenu = (open) => { nav.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", open); menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu"); };
+  const setMenu = (open) => { nav.classList.toggle("open", open); menuBtn.setAttribute("aria-expanded", open); menuBtn.setAttribute("aria-label", open ? "Close menu" : "Open menu"); document.body.classList.toggle("menu-open", open); };
   menuBtn.addEventListener("click", () => setMenu(!nav.classList.contains("open")));
   $$("#nav a").forEach((a) => a.addEventListener("click", () => setMenu(false)));
   document.addEventListener("keydown", (e) => { if (e.key === "Escape" && nav.classList.contains("open")) { setMenu(false); menuBtn.focus(); } });
@@ -183,8 +216,8 @@
     $("#f-name").removeAttribute("aria-invalid"); $("#f-phone").removeAttribute("aria-invalid");
     if (name.length < 2) { $("#f-name").setAttribute("aria-invalid", "true"); $("#f-name").focus(); return setStatus("Please enter your name.", true); }
     if (!/^[+\d][\d\s-]{8,14}$/.test(phone) || phone.replace(/\D/g, "").length < 10) { $("#f-phone").setAttribute("aria-invalid", "true"); $("#f-phone").focus(); return setStatus("Please enter a valid 10-digit phone number.", true); }
-    if (!waOk) return setStatus(DEMO ? "Demo: add the clinic WhatsApp number in config.js to enable this." : "WhatsApp enquiry is not available right now — please call the clinic.", true);
-    const msg = `${C.messages.appointment}\n\nName: ${name}\nPhone: ${phone}\nService: ${d.get("service") || "Not specified"}\nPreferred date: ${d.get("date") || "Flexible"}\nPreferred time: ${d.get("time") || "Flexible"}\nMessage: ${(d.get("message") || "").trim() || "\u2014"}`;
+    if (!waOk) return setStatus(phoneOk ? "Online enquiry isn't available yet — please call the clinic directly." : "Online enquiry isn't available yet — please check back soon.", true);
+    const msg = `*Appointment Enquiry*\n\n${C.messages.appointment}\n\nName: ${name}\nPhone: ${phone}\nService: ${d.get("service") || "Not specified"}\nPreferred date: ${d.get("date") || "Flexible"}\nPreferred time: ${d.get("time") || "Flexible"}\nMessage: ${(d.get("message") || "").trim() || "\u2014"}`;
     setStatus("Opening WhatsApp with your enquiry\u2026", false);
     window.open(wa(msg), "_blank", "noopener");
     form.reset();

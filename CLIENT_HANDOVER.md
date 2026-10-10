@@ -12,7 +12,6 @@
 - [ ] Services actually offered (edit the list)
 - [ ] Genuine, permissioned testimonials (or leave empty — section hides itself)
 - [ ] Social links
-- [ ] `demoMode` set to `false`
 - [ ] Domain / `websiteUrl` updated (config.js, canonical + og:url in index.html, sitemap.xml, robots.txt)
 - [ ] SEO title + description updated in index.html
 - [ ] Mobile testing (menu, sticky Call/WhatsApp/Book bar, gallery filters, FAQ, form)

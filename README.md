@@ -15,18 +15,20 @@ sitemap.xml
 assets/images/... put clinic photos here
 ```
 
-## Empty values and `demoMode`
+## How missing details are handled
 
-Leave any detail as `""` in `config.js` if you don't have it yet — nothing is ever invented.
+Leave any value as `""` in `config.js` if you don't have it yet — nothing is ever invented.
+If a detail isn't filled in, that specific item is simply **hidden** (no "Details to be added",
+no `XXXXX`, no broken Call/WhatsApp button). For example:
 
-| | `demoMode: true` | `demoMode: false` |
-|---|---|---|
-| Phone / address / hours / email not filled | shows a calm "Details to be added" line | that row is **hidden** |
-| Call / WhatsApp with no number | button stays, tap shows a short note | **hidden** |
-| Testimonials | shown only if real ones are added (either mode) | same |
-| Gallery item with no photo | neutral placeholder tile | shown only if it has a real photo |
-
-The page never shows `XXXXX`, `example.com`, `[Opening]`, `[Patient name]` or any bracketed placeholder.
+- No phone number → the Call button is hidden everywhere (header, hero, sticky bar, footer)
+- No WhatsApp number → the WhatsApp button is hidden everywhere
+- No address/hours/email → that row is left out of the Contact section
+- No Google Maps link → the map is hidden
+- Nothing in Contact at all → the whole Contact section is hidden
+- No social links → the Follow Us area is hidden
+- No real photo for an image slot → a clean neutral icon tile is shown instead (never a broken image, never a fake photo)
+- No genuine testimonials → the Testimonials section is hidden
 
 ## How to change things (all in `config.js`)
 - **Clinic name / slogan / description / story** → `clinicName`, `clinicSlogan`, `clinicDescription`, `clinicStory`
@@ -41,9 +43,9 @@ The page never shows `XXXXX`, `example.com`, `[Opening]`, `[Patient name]` or an
 - **Gallery** → add items with `label`, `category` (used for the filter chips) and `src`
 
 ## Replacing images
-1. Upload a photo to e.g. `assets/images/hero/hero.jpg`
-2. Set the matching path in `config.js` (`images.hero`, `images.about`, `images.doctor`, or a `gallery` item's `src`)
-3. A missing or broken path always shows a clean placeholder — never a broken image icon.
+1. Upload a photo into `assets/images/` (e.g. `assets/images/hero-dental.jpg`)
+2. Set the matching path in `config.js` — `images.logo`, `images.hero`, `images.clinic`, `images.doctor`, or a `gallery` item's `src`
+3. A missing or broken path always shows a clean neutral icon tile — never a broken image, never a fake stock photo
 
 ## Appointment enquiry
 The floating form on the hero validates name + phone, then opens **WhatsApp** with a pre-filled message to the clinic's number. It's an enquiry, not an automatic booking — the clinic confirms the time. No server needed.

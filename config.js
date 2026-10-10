@@ -3,12 +3,15 @@
    new dental clinic. Leave any value as "" if you don't have it — nothing
    on this site is ever invented. See README.md for the full guide.
 
-   demoMode: true  -> empty details show a calm "Details to be added" line
-   demoMode: false -> empty details are hidden (no fake numbers, no broken links)
+   Any detail left empty is simply hidden on the page (no fake numbers, no
+   broken links, no "placeholder" text of any kind) — this applies always,
+   regardless of demoMode. demoMode is currently unused by the page itself;
+   it's kept here in case a future version needs a template/demo indicator.
    ============================================================================= */
 
-const SITE_CONFIG = {
-  demoMode: true,
+// EDIT CLIENT INFORMATION HERE
+const CLINIC_CONFIG = {
+  demoMode: true, // reserved for future use — visibility is now driven purely by whether a value is filled in
 
   /* ---- Clinic ---- */
   clinicName: "Varanasi Dental Care",
@@ -57,16 +60,17 @@ const SITE_CONFIG = {
      photos exist. Left as "" it shows a clean, labelled placeholder — never
      a stock photo pretending to be the real clinic. ---- */
   images: {
-    hero: "",
-    about: "",
-    doctor: "",
+    logo: "",   // e.g. "assets/images/logo.svg" — leave "" to use the built-in tooth icon
+    hero: "",   // e.g. "assets/images/hero-dental.jpg"
+    clinic: "", // e.g. "assets/images/clinic-about.jpg"
+    doctor: "", // e.g. "assets/images/doctor.jpg"
   },
   gallery: [
-    { label: "Reception",       category: "Reception",      src: "" },
-    { label: "Treatment Room",  category: "Treatment Room", src: "" },
-    { label: "Waiting Area",    category: "Waiting Area",   src: "" },
-    { label: "Equipment",       category: "Equipment",      src: "" },
-    { label: "Clinic Exterior", category: "Exterior",       src: "" },
+    { label: "Reception",       category: "Reception",      src: "" }, // e.g. "assets/images/gallery-01.jpg"
+    { label: "Treatment Room",  category: "Treatment Room", src: "" }, // "assets/images/gallery-02.jpg"
+    { label: "Waiting Area",    category: "Waiting Area",   src: "" }, // "assets/images/gallery-03.jpg"
+    { label: "Equipment",       category: "Equipment",      src: "" }, // "assets/images/gallery-04.jpg"
+    { label: "Clinic Exterior", category: "Exterior",       src: "" }, // "assets/images/gallery-05.jpg"
   ],
 
   /* ---- Hero trust badges ---- */

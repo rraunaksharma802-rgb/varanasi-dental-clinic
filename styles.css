@@ -65,7 +65,7 @@ section[id],form[id]{scroll-margin-top:96px}
 .hero-photo{aspect-ratio:4/3.2;border-radius:22px;box-shadow:var(--shadow);background:var(--navy);overflow:hidden;position:relative;max-height:420px}
 .hero-photo img{width:100%;height:100%;object-fit:cover}
 .hero-form-card{background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:24px;margin:-70px 0 0 auto;width:min(320px,86%);position:relative;z-index:2}
-.hero-form-card h3{font-size:18px;margin-bottom:2px}
+.hero-form-card h2{font-size:18px;margin-bottom:2px}
 .hero-form-sub{font-size:12.5px;color:var(--muted);margin:0 0 16px}
 
 /* ---------- shared sections ---------- */
@@ -169,6 +169,7 @@ section[id],form[id]{scroll-margin-top:96px}
 
 /* ---------- contact ---------- */
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:stretch}
+.contact-grid.single{grid-template-columns:1fr;max-width:560px;margin:0 auto}
 .info-list{list-style:none;padding:0;margin:0;display:grid;gap:20px}
 .info-list li{display:flex;gap:14px;font-size:14.5px}
 .info-list .icon-slot{width:40px;height:40px;border-radius:10px;background:#ffffff1a;color:#8fd6c6;display:grid;place-items:center;flex:none}
@@ -185,7 +186,7 @@ section[id],form[id]{scroll-margin-top:96px}
 .footer{background:var(--navy-2);color:#a9c7c1;padding:56px 0 24px;font-size:14px}
 .footer .logo b{color:#fff}
 .footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px}
-.footer h4{color:#fff;font-size:14px;margin:0 0 12px;font-family:"Inter"}
+.footer h3{color:#fff;font-size:14px;margin:0 0 12px;font-family:"Inter"}
 .footer p{max-width:32ch}
 .footer a{display:block;margin:6px 0;color:#a9c7c1}
 .footer a:hover{color:#fff}
@@ -212,6 +213,7 @@ section[id],form[id]{scroll-margin-top:96px}
 @media(max-width:980px){
   .nav{display:none}
   .nav.open{display:flex!important;position:absolute;top:78px;left:4%;right:4%;background:#fff;flex-direction:column;align-items:stretch;padding:18px;border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.15);border:1px solid var(--line);gap:14px;z-index:45}
+body.menu-open{overflow:hidden}
   .menu-btn{display:block}
   .hero-grid,.about-grid,.doctor-grid,.faq-grid,.contact-grid{grid-template-columns:1fr}
   .hero-media{order:-1}
@@ -220,8 +222,8 @@ section[id],form[id]{scroll-margin-top:96px}
   .process li:not(:last-child):after{display:none}
   .footer-grid{grid-template-columns:1fr 1fr}
   .faq-cta{position:static}
-  body{padding-bottom:calc(76px + env(safe-area-inset-bottom,0px))}
-  .toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+  body{padding-bottom:calc(84px + env(safe-area-inset-bottom,0px))} /* sticky bar is ~59px tall; extra margin so nothing sits flush behind it */
+  .toast{bottom:calc(96px + env(safe-area-inset-bottom,0px))}
   .sticky-cta{display:block}
 }
 @media(max-width:600px){
