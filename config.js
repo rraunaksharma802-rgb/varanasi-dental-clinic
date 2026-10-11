@@ -36,13 +36,13 @@ const CLINIC_CONFIG = {
   doctorBio: "",               // 2–3 sentences supplied by the clinic
 
   /* ---- Contact (leave "" if not available) ---- */
-  clinicPhone: "",             // tel: format, e.g. "+919876543210"
-  clinicPhoneDisplay: "",      // e.g. "+91 98765 43210"
-  whatsappNumber: "",          // e.g. "919876543210" (country code, no + or spaces)
+  clinicPhone: "+917236839750",             // tel: format, e.g. "+919876543210"
+  clinicPhoneDisplay: "+91 72368 39750",      // e.g. "+91 98765 43210"
+  whatsappNumber: "917236839750",          // e.g. "919876543210" (country code, no + or spaces)
   email: "",
   address: {
-    line1: "",   // e.g. "123 Dental Care Road"
-    line2: "",   // e.g. "Cantonment, Varanasi, Uttar Pradesh — 221002"
+    line1: "Rampur Jiwan",   // e.g. "123 Dental Care Road"
+    line2: "Ghazipur, Uttar Pradesh",   // e.g. "Cantonment, Varanasi, Uttar Pradesh — 221002"
   },
   openingHours: [
     // { days: "Mon – Sat", time: "10:00 AM – 7:00 PM" },
