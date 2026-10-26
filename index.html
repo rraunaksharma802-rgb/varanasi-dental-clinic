@@ -22,6 +22,8 @@
 </head>
 <body>
 
+<div class="demo-banner" id="demoBanner" role="note" hidden></div>
+
 <header class="header"><div class="container nav-wrap">
   <a class="logo" href="#home" aria-label="Home"><span class="logo-mark" id="logo-icon"></span><span><b id="brand-name">Clinic</b><span id="brand-city">Dental Care</span></span></a>
   <button class="menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false" aria-controls="nav">
@@ -80,6 +82,7 @@
     <a class="btn btn-outline" href="#services-grid">View All Services <span aria-hidden="true">&#8594;</span></a>
   </div>
   <div class="grid-5" id="services-grid"></div>
+  <p class="note-demo" id="svc-note" hidden></p>
   <div class="banner">
     <div class="banner-icon" id="banner-icon"></div>
     <div class="banner-copy"><h3>Need Help Choosing the Right Treatment?</h3><p>Our team is here to guide you. Book a consultation today.</p></div>
@@ -94,7 +97,6 @@
     <h2>Your Trusted Dental Care Partner</h2>
     <p id="clinic-story"></p>
     <ul class="ticks" id="about-ticks"></ul>
-    <a class="btn btn-primary" href="#about">Know More About Us <span aria-hidden="true">&#8594;</span></a>
   </div>
 </div></section>
 
@@ -175,9 +177,62 @@
   </div>
 </nav>
 
+<!-- Voice + text receptionist (free, runs in the visitor's browser). Hidden if config.js sets receptionist.enabled = false -->
+<button class="vr-fab" id="vrOpen" type="button" aria-haspopup="dialog" aria-controls="vrPanel" hidden>
+  <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+  <span>Voice se baat karein</span>
+</button>
+<section class="vr-panel" id="vrPanel" role="dialog" aria-labelledby="vrTitle" hidden>
+  <header class="vr-head">
+    <div>
+      <h2 id="vrTitle">Virtual Receptionist</h2>
+      <p class="vr-sub">Automatic assistant, insaan nahi <span class="vr-badge" id="vrDemo" hidden>DEMO</span></p>
+    </div>
+    <div class="vr-head-actions">
+      <button type="button" class="vr-end" id="vrEnd">Baat band karein</button>
+      <button type="button" class="vr-x" id="vrClose" aria-label="Receptionist band karke chhupayein">&times;</button>
+    </div>
+  </header>
+  <div class="vr-body">
+    <p class="vr-privacy"><strong>Privacy:</strong> Yeh assistant aapki baat kahin save ya server par nahi bhejta. Mic use karne par Chrome aapki awaaz speech-to-text ke liye apne online service par bhej sakta hai. Phone number, bimari ya Aadhaar jaisi jankari yahan na likhein. Yeh sirf <strong>appointment request</strong> likhta hai, booking confirm nahi karta, aur medical salah nahi deta.</p>
+    <div class="vr-log" id="vrLog" aria-live="polite" aria-label="Conversation"></div>
+    <div class="vr-summary" id="vrSummary" hidden>
+      <h3>Appointment request summary</h3>
+      <dl id="vrSummaryList"></dl>
+      <p class="vr-warn" id="vrSummaryStatus"></p>
+      <div class="vr-actions">
+        <button type="button" class="btn btn-outline" id="vrFill">Form mein bharein</button>
+        <a class="btn btn-primary" id="vrWa" href="#" target="_blank" rel="noopener" hidden>WhatsApp par bhejein</a>
+        <button type="button" class="btn btn-outline" id="vrCopy">Copy karein</button>
+      </div>
+      <p class="vr-hint">Kuch bhi apne-aap nahi bheja jata. WhatsApp mein aap khud "Send" dabate hain.</p>
+    </div>
+    <div class="vr-chips" id="vrChips">
+      <button type="button" data-q="Aapki services kya hain?">Services</button>
+      <button type="button" data-q="Clinic ki timing kya hai?">Timing</button>
+      <button type="button" data-q="Mujhe appointment chahiye">Appointment request</button>
+      <button type="button" data-q="Staff se baat karni hai">Staff se baat</button>
+    </div>
+  </div>
+  <form class="vr-compose" id="vrForm" autocomplete="off">
+    <button type="button" class="vr-mic" id="vrMic" aria-label="Bolne ke liye mic dabayein" aria-pressed="false">
+      <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="12" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+    </button>
+    <input id="vrInput" type="text" placeholder="Yahan type karein (Hindi ya Hinglish)" aria-label="Message type karein" enterkeyhint="send">
+    <button class="btn btn-primary" type="submit">Bhejein</button>
+  </form>
+  <div class="vr-foot">
+    <span class="vr-status" id="vrStatus" role="status">Taiyar. Mic dabayein ya type karein.</span>
+    <label class="vr-toggle"><input id="vrSpeak" type="checkbox" checked> Awaaz mein jawab</label>
+  </div>
+  <p class="vr-hint vr-voice-note" id="vrVoiceNote"></p>
+</section>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <script type="application/ld+json" id="schema-block"></script>
 <script src="config.js"></script>
 <script src="script.js"></script>
+<script src="receptionist.js"></script>
+<script src="voice-widget.js"></script>
 </body>
 </html>

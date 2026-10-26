@@ -10,6 +10,8 @@ index.html      page structure
 styles.css      design (white/teal, Playfair Display + Inter)
 script.js       behaviour: menu, gallery filters, FAQ, WhatsApp enquiry, SEO data
 config.js       ALL clinic details  <-- edit this
+receptionist.js Hindi/Hinglish receptionist rules (reads config.js; not an AI model)
+voice-widget.js mic, spoken replies, text chat and the receptionist panel
 robots.txt
 sitemap.xml
 assets/images/... put clinic photos here
@@ -55,3 +57,16 @@ The floating form on the hero validates name + phone, then opens **WhatsApp** wi
 2. Settings → Pages → Source: `main` / root → Save.
 3. Live at `https://<username>.github.io/<repo>/`.
 4. For a client domain, update `websiteUrl` in `config.js`, canonical/og:url in `index.html`, and the URLs in `sitemap.xml`/`robots.txt`.
+
+## Voice + text receptionist (free, browser-only)
+- A "Voice se baat karein" button opens a panel. Patients can speak (mic) or type. Replies are shown as text and spoken aloud.
+- It reads services, phone, WhatsApp, address, hours and doctor from `config.js`. Anything left empty is answered as "please confirm with the clinic". It never gives fees.
+- It only writes an appointment REQUEST summary. It never says "booked" or "confirmed". The patient can copy the summary, send it on WhatsApp (they press Send), or fill the website form with it.
+- It does not give medical advice or diagnosis. Pain/swelling/bleeding words get an "see a qualified dentist or urgent care" reply.
+- It is rule-based (fixed rules), not an AI model. Questions outside its rules get a polite "please contact the clinic".
+- Turn it off: set `receptionist: { enabled: false }` in `config.js`.
+
+### Free-tier limits (honest)
+- Mic needs Android Chrome, internet and microphone permission. Chrome sends the audio to Google's speech service to convert it to text. This is disclosed in the panel.
+- The spoken voice is the phone's own voice. Quality depends on the phone and may sound robotic. If no Hindi voice is installed, replies are text only.
+- Better voice quality or real AI understanding needs an external service (cloud TTS / an AI model API) that can have free tiers with limits or cost money. None is included or activated. Never put an API key in this repo's JavaScript.

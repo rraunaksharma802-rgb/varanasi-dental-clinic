@@ -11,20 +11,24 @@
 
 // EDIT CLIENT INFORMATION HERE
 const CLINIC_CONFIG = {
-  demoMode: true, // reserved for future use — visibility is now driven purely by whether a value is filled in
+  // demoMode: true  = this is a SAMPLE site for showing clients. A visible demo notice is shown,
+  //                    search engines are told not to index it, and the phone/address are NOT put in
+  //                    the search-engine (schema) data.
+  // demoMode: false = the clinic has verified every detail below. Set it ONLY then.
+  demoMode: true,
+  demoNotice: "Demo website. Clinic details, services and wording are sample content for demonstration, not a real clinic's verified information.",
 
   /* ---- Clinic ---- */
   clinicName: "Varanasi Dental Care",
   clinicTagline: "Dental Care",
   clinicSlogan: "Healthy Smiles \u00B7 Brighter Lives",
-  clinicDescription: "We provide gentle, expert dental care for your entire family. From routine check-ups to advanced treatments, your smile is in safe hands.",
-  clinicStory: "At Varanasi Dental Care, we believe every smile matters. Our goal is to provide personalised, gentle and effective care in a comfortable environment — so every visit feels straightforward and every question gets answered.",
+  clinicDescription: "Information about dental services, an easy appointment enquiry, and direct Call and WhatsApp contact. The clinic confirms your final appointment time.",
+  clinicStory: "This page helps patients see the clinic's services and send an appointment enquiry. Details such as the doctor, timings and fees are shown only after the clinic has confirmed them. Replace this text with the clinic's own story.",
   aboutPoints: [
-    "Patient-first approach",
-    "Modern clinical environment",
-    "Hygiene-focused care",
-    "Clear treatment explanations",
-    "Convenient appointment scheduling",
+    "Send an appointment enquiry online",
+    "Call or WhatsApp the clinic directly",
+    "The clinic confirms your final time",
+    "Ask about any service before you visit",
   ],
   city: "Varanasi",
   state: "Uttar Pradesh",
@@ -74,11 +78,13 @@ const CLINIC_CONFIG = {
   ],
 
   /* ---- Hero trust badges ---- */
+  // Only statements that are true of this website. Add claims about the clinic itself
+  // (equipment, experience, hygiene) only after the clinic confirms them.
   trustBadges: [
-    { icon: "user",   label: "Experienced Care Team" },
-    { icon: "tooth",  label: "Modern Equipment" },
-    { icon: "shield", label: "Safe & Hygienic Environment" },
-    { icon: "family", label: "Family-Friendly Clinic" },
+    { icon: "check", label: "Easy appointment enquiry" },
+    { icon: "phone", label: "Call or WhatsApp the clinic" },
+    { icon: "clock", label: "Clinic confirms your final time" },
+    { icon: "shield", label: "No sign-up needed" },
   ],
 
   /* ---- WhatsApp messages ---- */
@@ -87,34 +93,42 @@ const CLINIC_CONFIG = {
     appointment: "Hello, I would like to request a dental appointment.",
   },
 
+  /* ---- Voice / text receptionist (free, runs in the visitor's browser) ----
+     enabled: false hides the receptionist completely.
+     name: only the assistant's first name, not a claim about the clinic.
+     The receptionist reads services, phone, WhatsApp, address, hours and doctor from this file.
+     Anything left "" or empty is answered as "please confirm with the clinic". ---- */
+  receptionist: { enabled: true, name: "Priya" },
+
   /* ---- Services (icon: tooth sparkle pulse bolt star layers gem family shield alert) ---- */
   services: [
-    { icon: "tooth",   name: "General Dentistry",        desc: "Routine check-ups and basic dental care." },
-    { icon: "sparkle", name: "Dental Cleaning",          desc: "Remove plaque and keep your teeth healthy." },
-    { icon: "pulse",   name: "Root Canal Treatment",     desc: "Save your natural tooth with expert care." },
-    { icon: "bolt",    name: "Dental Implants",          desc: "Long-lasting solution for missing teeth." },
-    { icon: "star",    name: "Teeth Whitening",          desc: "Brighter smile, greater confidence." },
-    { icon: "layers",  name: "Crowns & Bridges",         desc: "Restore strength and appearance." },
-    { icon: "gem",     name: "Cosmetic Dentistry",       desc: "Enhance your smile's natural beauty." },
-    { icon: "family",  name: "Family Dentistry",         desc: "Care for every generation." },
-    { icon: "shield",  name: "Preventive Dentistry",     desc: "Stop problems before they worsen." },
-    { icon: "alert",   name: "Emergency Dental Care",    desc: "Quick relief for urgent issues." },
+    { icon: "tooth",   name: "General Dentistry", hi: "जनरल डेंटिस्ट्री",        desc: "Routine check-ups and basic dental care." },
+    { icon: "sparkle", name: "Dental Cleaning", hi: "डेंटल क्लीनिंग",          desc: "Professional cleaning of teeth." },
+    { icon: "pulse",   name: "Root Canal Treatment", hi: "रूट कैनाल ट्रीटमेंट",     desc: "Treatment for a badly damaged or infected tooth." },
+    { icon: "bolt",    name: "Dental Implants", hi: "डेंटल इम्प्लांट",          desc: "Replacement for missing teeth." },
+    { icon: "star",    name: "Teeth Whitening", hi: "टीथ व्हाइटनिंग",          desc: "Treatment to lighten tooth colour." },
+    { icon: "layers",  name: "Crowns & Bridges", hi: "क्राउन और ब्रिज",         desc: "Caps and bridges for damaged or missing teeth." },
+    { icon: "gem",     name: "Cosmetic Dentistry", hi: "कॉस्मेटिक डेंटिस्ट्री",       desc: "Treatments that improve how teeth look." },
+    { icon: "family",  name: "Family Dentistry", hi: "फैमिली डेंटिस्ट्री",         desc: "Dental care for different age groups." },
+    { icon: "shield",  name: "Preventive Dentistry", hi: "प्रिवेंटिव डेंटिस्ट्री",     desc: "Regular check-ups and care to prevent problems." },
+    { icon: "alert",   name: "Urgent Dental Problems", hi: "अर्जेंट डेंटल प्रॉब्लम्स",   desc: "For urgent problems, call the clinic directly." },
   ],
 
   /* ---- Why choose us ---- */
+  // Replace with points the clinic itself confirms. These only describe how this website works.
   whyUs: [
-    { icon: "user",   title: "Patient-first consultations",       desc: "Every visit starts with listening." },
-    { icon: "tooth",  title: "Modern equipment",                  desc: "Contemporary tools and technique." },
-    { icon: "shield", title: "Hygiene-focused care",               desc: "Sterile instruments, every visit." },
-    { icon: "chat",   title: "Clear communication",                desc: "No jargon, no pressure." },
-    { icon: "pulse",  title: "Transparent treatment discussions",  desc: "Costs and options explained upfront." },
-    { icon: "clock",  title: "Convenient scheduling",              desc: "Appointments that fit your week." },
+    { icon: "check", title: "Simple enquiry",         desc: "Send your preferred day and time in under a minute." },
+    { icon: "clock", title: "Clinic confirms",        desc: "Your final time is confirmed by the clinic, not the website." },
+    { icon: "phone", title: "Direct contact",         desc: "Call or WhatsApp the clinic whenever you prefer." },
+    { icon: "chat",  title: "Questions welcome",      desc: "Ask about any service before you visit." },
+    { icon: "pin",   title: "Details from the clinic", desc: "Timings, doctor and fees are shown once the clinic confirms them." },
+    { icon: "user",  title: "Your details stay yours", desc: "The website stores nothing. Your enquiry goes to WhatsApp only when you press send." },
   ],
 
   /* ---- Treatment process ---- */
   process: [
     { icon: "user",  step: "01", title: "Consultation",             desc: "Discuss your concerns and goals." },
-    { icon: "star",  step: "02", title: "Examination & Diagnosis",   desc: "A detailed check-up with modern technology." },
+    { icon: "star",  step: "02", title: "Examination",               desc: "The dentist examines your teeth and explains what they find." },
     { icon: "layers",step: "03", title: "Treatment Plan",            desc: "A personalised plan for your needs." },
     { icon: "check", step: "04", title: "Follow-up",                 desc: "Ongoing care for lasting results." },
   ],
@@ -128,7 +142,7 @@ const CLINIC_CONFIG = {
     { q: "How can I book an appointment?", a: "Use the appointment enquiry form on this page, call the clinic, or send a WhatsApp message. The clinic will confirm your final time." },
     { q: "What should I bring to my first visit?", a: "Any previous dental records, X-rays or prescriptions you have, and a list of any medicines you currently take." },
     { q: "How can I contact the clinic?", a: "You can call, message on WhatsApp, or email using the details in the Contact section." },
-    { q: "Do you treat children?", a: "Yes — the clinic welcomes patients of all ages, with a gentle approach for younger children." },
+    { q: "Do you treat children?", a: "Please ask the clinic by call or WhatsApp. The clinic will tell you which age groups it treats." },
     { q: "What are the clinic hours?", a: "See the opening hours in the Contact section. For urgent problems, please call the clinic directly." },
     { q: "How can I find the clinic?", a: "Use the address and the Google Maps link in the Contact section." },
   ],
